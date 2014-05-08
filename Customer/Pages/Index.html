@@ -1,0 +1,57 @@
+﻿<html>
+<head>
+    <script src="../Scripts/consoleLog.js"></script>
+    <script src="../Scripts/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="../Scripts/angular.min.js"></script>
+    <script src="../Scripts/bootstrap.min.js"></script>
+    <link href="../Content/bootstrap.css" rel="stylesheet" />
+    <script src="../Scripts/underscore.js"></script>
+    <script src="../Modules/base.js"></script>
+    <script src="../Services/customerService.js"></script>
+
+    <script src="../Controllers/CustomerController.js"></script>
+
+    <title>Customers</title>
+</head>
+
+<body>
+    <div id='content' ng-app='customerApp' ng-controller='CustomerController' style="margin-left: 20px">
+        <div>
+            <br /><b>Search customer</b><br />
+            <input type="text" ng-model="searchValue" ng-keyup="searchByName()"><br /><br />
+        </div>
+        <div ng-show="searchResult.length > 0">
+            <b>{{returnTotalSearchResults()}} found</b>
+            <ul class="unstyled">
+                <li ng-repeat="result in searchResult">
+                    {{result.Name}}
+                    <a href="#" ng-click="editThisCustomer(result.Id)">   Edit</a>
+                    <a href="#" ng-click="deleteThisCustomer(result.Id)">   Delete</a>
+                </li>
+            </ul>
+
+            <br />
+            <br />
+        </div>
+        <hr />
+        <div ng-show="customer">
+            <b> Edit customer<br /></b>
+            Id: <label>{{customer.Id}}</label><br />
+            Name: <input type="text" ng-model="customer.Name" ng-model-instant><br /><br />
+            <button ng-click="editCustomer()"><i class="icon-plus"></i>Edit Customer</button>
+
+            <br />
+            <br />
+            <br />
+            <hr />
+        </div>
+        <div>
+            <b>Add new customer<br /></b>
+            <input type="text" ng-model="newCustomerName" ng-model-instant><br /><br />
+            <button ng-click="addNewCustomer()"><i class="icon-plus"></i>New Customer</button><br /><br />
+            <label ng-show="ok" style="color:green">Save done!</label>
+        </div>
+    </div>
+</body>
+
+</html>
