@@ -16,6 +16,13 @@ namespace Customer.Controllers.Api
         public string Name { get; set; }
     }
 
+    public class CustomerMessage
+    {
+        public Customer From { get; set; }
+        public string To { get; set; }
+        public string Text { get; set; }
+    }
+
     public class Customers
     {
         public Customers()

@@ -8,6 +8,8 @@
     <script src="../Scripts/underscore.js"></script>
     <script src="../Modules/base.js"></script>
     <script src="../Services/customerService.js"></script>
+    <script src="../Scripts/jquery.signalR-2.1.2.js"></script>
+    <script src="../signalr/hubs"></script>
 
     <script src="../Controllers/CustomerController.js"></script>
 
@@ -37,11 +39,19 @@
         <div ng-show="customer">
             <b> Edit customer<br /></b>
             Id: <label>{{customer.Id}}</label><br />
-            Name: <input type="text" ng-model="customer.Name" ng-model-instant><br /><br />
+            Name: <input type="text" ng-model="customer.Name" ng-model-instant ><br /><br />
             <button ng-click="editCustomer()"><i class="icon-plus"></i>Edit Customer</button>
 
             <br />
             <br />
+            <ul class="unstyled">
+                <li ng-repeat="message in customerMessages" ng-style="message.fromMe && {'color':'red'}"><b ng-if="message.fromMe">Jag till {{message.to}}: </b><b ng-if="!message.fromMe">Från {{message.from}}: </b>{{message.text}}</li>
+            </ul>
+            <br />
+            <b>Write message<br /></b>
+            <input type="text" ng-model="newMessage.to" ng-model-instant><br /><br />
+            <input type="text" ng-model="newMessage.text" ng-model-instant><br /><br />
+            <button ng-click="sendMessage()"><i class="icon-plus"></i>Send</button><br /><br />
             <br />
             <hr />
         </div>
