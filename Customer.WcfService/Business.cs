@@ -10,6 +10,7 @@ namespace Customer.WcfService
         SearchResults Search(string searchKey);
         SearchResults Search(Guid searchKey);
         DataAccess.Customer Save(DataAccess.Customer customer);
+        void SaveMessage(DataAccess.CustomerMessage message);
         bool Delete(Guid customerId);
     }
 
@@ -41,6 +42,11 @@ namespace Customer.WcfService
         public DataAccess.Customer Save(DataAccess.Customer customer)
         {
             return _dataAccess.Save(customer);
+        }
+
+        public void SaveMessage(DataAccess.CustomerMessage message)
+        {
+            _dataAccess.SaveMessage(message);
         }
 
         public bool Delete(Guid customerId)

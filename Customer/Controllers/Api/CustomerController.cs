@@ -68,6 +68,24 @@ namespace Customer.Controllers.Api
             return new Customer { Id = cust.Id, Name = cust.Name }; ;
         }
 
+        // POST /Api/Customer/SaveMessage
+        public CustomerMessage SaveMessage([FromBody]CustomerMessage message)
+        {
+            var dataMessage = new DataAccess.CustomerMessage
+            {
+                From = new DataAccess.Customer
+                {
+                    Id = message.From.Id,
+                    Name = message.From.Name
+                },
+                To = message.To,
+                Text = message.Text
+            };
+            _business.SaveMessage(dataMessage);
+
+            return message;
+        }
+
         // GET /Api/Customer/DeleteCustomer
         [System.Web.Http.AcceptVerbs("GET")]
         public bool DeleteCustomer([FromUri]Guid customerIdToDelete)

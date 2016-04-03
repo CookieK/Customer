@@ -14,6 +14,8 @@ namespace Customer.WcfService
         DataAccess.Customer Save(DataAccess.Customer customer);
         IEnumerable<DataAccess.Customer> Search(Guid customerId);
         bool Delete(Guid customerId);
+       void SaveMessage(DataAccess.CustomerMessage message);
+
     }
 
     public class SisoDictionary
@@ -31,6 +33,13 @@ namespace Customer.WcfService
             public string Name { get; set; }
         }
 
+        public class CustomerMessage
+        {
+            public Customer From { get; set; }
+            public string To { get; set; }
+            public string Text { get; set; }
+        }
+
         private ISisoDatabase _db;
 
         public DataAccess(ISisoDatabase db)
@@ -38,7 +47,7 @@ namespace Customer.WcfService
             _db = db;
         }
 
-       public IEnumerable<Customer> Search(string searchKey)
+        public IEnumerable<Customer> Search(string searchKey)
         {
             var dbResult = _db.UseOnceTo().Query<SisoDictionary>().Where(s => s.Name.Contains(searchKey));
             return from result in dbResult.ToListOf<SisoDictionary>()
@@ -98,6 +107,9 @@ namespace Customer.WcfService
             }
         }
 
-
+        public void SaveMessage(CustomerMessage message)
+        {
+            ;
+        }
     }
 }

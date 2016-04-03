@@ -80,8 +80,12 @@
 
     $scope.sendMessage = function () {
         $scope.newMessage.from = $scope.customer;
-        messageHub.server.send($scope.newMessage);
-        $scope.newMessage = null;
+
+        //CustomerService.saveMessage($scope.newMessage)
+        //.then(function () {
+            messageHub.server.send($scope.newMessage);
+            $scope.newMessage = null;
+        //});
     };
 
     messageHub.client.receiveMessage = function (message) {

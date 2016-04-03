@@ -52,11 +52,25 @@
         return q.promise;
     }
 
+    function saveMessage(message) {
+        var q = $q.defer();
+        $http({
+            url: 'http://localhost:50383/api/customer/savemessage',
+            method: 'POST',
+            data: message
+        }).success(function (response) {
+            q.resolve(response);
+        });
+
+        return q.promise;
+    }
+
     return {
         getCustomer: getCustomer,
         searchCustomer: searchCustomer,
         saveCustomer: saveCustomer,
-        deleteCustomer: deleteCustomer
+        deleteCustomer: deleteCustomer,
+        saveMessage: saveMessage
     };
 });
 
