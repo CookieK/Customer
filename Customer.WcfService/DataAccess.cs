@@ -19,7 +19,7 @@ namespace Customer.WcfService
         IEnumerable<DataAccess.Customer> Search(Guid customerId);
         bool Delete(Guid customerId);
         void SaveMessage(DataAccess.CustomerMessage message);
-
+        IEnumerable<DataAccess.CustomerMessage> ListMessages(DataAccess.Customer customer);
     }
 
     public class SisoDictionary
@@ -39,6 +39,7 @@ namespace Customer.WcfService
 
         public class CustomerMessage
         {
+            public Guid Id { get; set; }
             public Customer From { get; set; }
             public string To { get; set; }
             public string Text { get; set; }
@@ -113,36 +114,9 @@ namespace Customer.WcfService
 
         public void SaveMessage(CustomerMessage message)
         {
-            //try
-            //{
-            //    var dictionary = new SisoDictionary();
+            _db.UseOnceTo().Insert(message);
 
-            //    if (message.Id != new Guid())
-            //    {
-            //        dictionary = new SisoDictionary
-            //        {
-            //            Id = customer.Id,
-            //            Name = customer.Name,
-            //        };
-            //        _db.UseOnceTo().Update(dictionary);
-            //    }
-            //    else
-            //    {
-            //        dictionary = new SisoDictionary
-            //        {
-            //            Name = customer.Name,
-            //        };
-            //        _db.UseOnceTo().Insert(dictionary);
-            //    }
-
-            //    return new Customer { Id = dictionary.Id, Name = dictionary.Name };
-            //}
-            //catch (Exception)
-            //{
-            //    return null;
-            //}
-
-            var request = new HttpRequestMessage { RequestUri = new Uri("http://localhost:50383/api/message/ReceiveMessage") };
+            var request = new HttpRequestMessage { RequestUri = new Uri("http://localhost:50383/api/hub/ReceiveMessage") };
 
             request.Method = HttpMethod.Put;
             request.Content = new ObjectContent<CustomerMessage>(message, new JsonMediaTypeFormatter { SerializerSettings = { ContractResolver = new CamelCasePropertyNamesContractResolver() } });
@@ -157,6 +131,11 @@ namespace Customer.WcfService
                     var result = client.SendAsync(request).Result;
                 }
             }
+        }
+
+        public IEnumerable<CustomerMessage> ListMessages(Customer customer)
+        {
+            return _db.UseOnceTo().Query<CustomerMessage>().Where(s => s.From.Id == customer.Id || s.To == customer.Name).ToList();
         }
     }
 }

@@ -48,16 +48,19 @@
     };
 
     $scope.editThisCustomer = function (customerId) {
+        $scope.customerMessages = [];
         $scope.ok = false;
+
         CustomerService.getCustomer(customerId)
           .then(function (cust) {
               $scope.customer = cust;
-              $scope.customerMessages = [];
+              $scope.listMessages(cust);
           });
     };
 
     $scope.editCustomer = function () {
         $scope.ok = false;
+
         CustomerService.saveCustomer($scope.customer)
         .then(function (cust) {
             $scope.customer = cust;
@@ -75,8 +78,27 @@
               $scope.searchByName();
 
               $scope.customer = '';
+              $scope.customerMessages = [];
           });
     };
+
+    $scope.listMessages = function () {
+        CustomerService.listMessages($scope.customer)
+         .then(function (customerMessages) {
+             _.forEach(customerMessages, function (message) {
+                 $scope.addMessageToList(message);
+             });
+         });
+    };
+
+    $scope.addMessageToList = function(message) {
+        if (message.From.Id === $scope.customer.Id) {
+            $scope.customerMessages.push({ text: message.Text, fromMe: true, from: message.From.Name, to: message.To });
+        }
+        if (message.To === $scope.customer.Name) {
+            $scope.customerMessages.push({ text: message.Text, fromMe: false, from: message.From.Name, to: message.To });
+        }
+    }
 
     $scope.sendMessage = function () {
         $scope.newMessage.from = $scope.customer;
@@ -84,12 +106,7 @@
     };
 
     messageHub.client.receiveMessage = function (message) {
-        if (message.From.Id === $scope.customer.Id) {
-            $scope.customerMessages.push({ text: message.Text, fromMe: true, from: message.From.Name, to: message.To });
-        }
-        if (message.To === $scope.customer.Name) {
-            $scope.customerMessages.push({ text: message.Text, fromMe: false, from: message.From.Name, to: message.To });
-        }
+        $scope.addMessageToList(message);
         $scope.$apply();
     }
 });

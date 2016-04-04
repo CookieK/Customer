@@ -12,6 +12,7 @@ namespace Customer.WcfService
         DataAccess.Customer Save(DataAccess.Customer customer);
         void SaveMessage(DataAccess.CustomerMessage message);
         bool Delete(Guid customerId);
+        IEnumerable<DataAccess.CustomerMessage> ListMessages(DataAccess.Customer customer);
     }
 
     public class Business : IBusiness
@@ -47,6 +48,11 @@ namespace Customer.WcfService
         public void SaveMessage(DataAccess.CustomerMessage message)
         {
             _dataAccess.SaveMessage(message);
+        }
+
+        public IEnumerable<DataAccess.CustomerMessage> ListMessages(DataAccess.Customer customer)
+        {
+            return _dataAccess.ListMessages(customer);
         }
 
         public bool Delete(Guid customerId)

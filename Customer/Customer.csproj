@@ -410,6 +410,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Container\ClassRegistry.cs" />
+    <Compile Include="Controllers\Api\HubController.cs" />
     <Compile Include="Controllers\Api\MessageController.cs" />
     <Compile Include="Controllers\Api\CustomerController.cs" />
     <Compile Include="SignalR\CustomerHub.cs" />

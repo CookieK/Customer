@@ -65,10 +65,24 @@
         return q.promise;
     }
 
+    function listMessages(customer) {
+        var q = $q.defer();
+        $http({
+            url: 'http://localhost:50383/api/message/listmessages',
+            method: 'PUT',
+            data: customer
+        }).success(function (response) {
+            q.resolve(response);
+        });
+
+        return q.promise;
+    }
+
     return {
         getCustomer: getCustomer,
         searchCustomer: searchCustomer,
         saveCustomer: saveCustomer,
+        listMessages: listMessages,
         deleteCustomer: deleteCustomer,
         saveMessage: saveMessage
     };
