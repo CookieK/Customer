@@ -16,14 +16,7 @@ namespace Customer.Controllers.Api
         public string Name { get; set; }
     }
 
-    public class CustomerMessage
-    {
-        public Customer From { get; set; }
-        public string To { get; set; }
-        public string Text { get; set; }
-    }
-
-    public class Customers
+   public class Customers
     {
         public Customers()
         {
@@ -66,24 +59,6 @@ namespace Customer.Controllers.Api
             var cust = _business.Save(dataCustomer);
 
             return new Customer { Id = cust.Id, Name = cust.Name }; ;
-        }
-
-        // POST /Api/Customer/SaveMessage
-        public CustomerMessage SaveMessage([FromBody]CustomerMessage message)
-        {
-            var dataMessage = new DataAccess.CustomerMessage
-            {
-                From = new DataAccess.Customer
-                {
-                    Id = message.From.Id,
-                    Name = message.From.Name
-                },
-                To = message.To,
-                Text = message.Text
-            };
-            _business.SaveMessage(dataMessage);
-
-            return message;
         }
 
         // GET /Api/Customer/DeleteCustomer

@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
 using System.Web;
+using Newtonsoft.Json.Serialization;
 using SisoDb;
 using SisoDb.Sql2012;
 
@@ -14,7 +18,7 @@ namespace Customer.WcfService
         DataAccess.Customer Save(DataAccess.Customer customer);
         IEnumerable<DataAccess.Customer> Search(Guid customerId);
         bool Delete(Guid customerId);
-       void SaveMessage(DataAccess.CustomerMessage message);
+        void SaveMessage(DataAccess.CustomerMessage message);
 
     }
 
@@ -109,7 +113,50 @@ namespace Customer.WcfService
 
         public void SaveMessage(CustomerMessage message)
         {
-            ;
+            //try
+            //{
+            //    var dictionary = new SisoDictionary();
+
+            //    if (message.Id != new Guid())
+            //    {
+            //        dictionary = new SisoDictionary
+            //        {
+            //            Id = customer.Id,
+            //            Name = customer.Name,
+            //        };
+            //        _db.UseOnceTo().Update(dictionary);
+            //    }
+            //    else
+            //    {
+            //        dictionary = new SisoDictionary
+            //        {
+            //            Name = customer.Name,
+            //        };
+            //        _db.UseOnceTo().Insert(dictionary);
+            //    }
+
+            //    return new Customer { Id = dictionary.Id, Name = dictionary.Name };
+            //}
+            //catch (Exception)
+            //{
+            //    return null;
+            //}
+
+            var request = new HttpRequestMessage { RequestUri = new Uri("http://localhost:50383/api/message/ReceiveMessage") };
+
+            request.Method = HttpMethod.Put;
+            request.Content = new ObjectContent<CustomerMessage>(message, new JsonMediaTypeFormatter { SerializerSettings = { ContractResolver = new CamelCasePropertyNamesContractResolver() } });
+
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            using (var handler = new HttpClientHandler { UseDefaultCredentials = true })
+            {
+                using (var client = new HttpClient(handler))
+                {
+                    client.Timeout = TimeSpan.FromSeconds(30);
+                    var result = client.SendAsync(request).Result;
+                }
+            }
         }
     }
 }

@@ -55,7 +55,7 @@
     function saveMessage(message) {
         var q = $q.defer();
         $http({
-            url: 'http://localhost:50383/api/customer/savemessage',
+            url: 'http://localhost:50383/api/message/savemessage',
             method: 'POST',
             data: message
         }).success(function (response) {
